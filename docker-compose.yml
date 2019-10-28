@@ -1,15 +1,22 @@
 version: '3'
 
+volumes:
+  db_data:
+
 services:
   db:
     image: postgres:11.1
     env_file:
       - .env
-  web_app:
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  backend:
     build:
       dockerfile: Dockerfile
       context: .
-    image: nsidnev/fastapi-realworld-example-app
+    image: schmiedeone/audit-app-backend
     env_file:
       - .env
     depends_on:
